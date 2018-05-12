@@ -1,8 +1,13 @@
 from flask import Flask
+from flask.views import MethodView
+
+from requestHandlers.receiveMessage import ReceiveMessageHander
+from utils.telegramHelper import setWebhooks
 
 # print a nice greeting.
 def say_hello(username = "World"):
-    return '<p>Hello %s!</p>\n' % username
+    webHookResult = setWebhooks()
+    return '<p>Hello %s!</p>\n' % webHookResult
 
 # some bits of text for the page.
 header_text = '''
@@ -25,6 +30,9 @@ application.add_url_rule('/', 'index', (lambda: header_text +
 # URL.
 application.add_url_rule('/<username>', 'hello', (lambda username:
     header_text + say_hello(username) + home_link + footer_text))
+
+# Adding rule for incoming messages
+application.add_url_rule('/receiveMessage', view_func=ReceiveMessageHander.as_view('receiveMessageHandler'))
 
 # run the app.
 if __name__ == "__main__":
