@@ -22,7 +22,17 @@ def setWebhooks():
 	data['max_connections'] = 30
 	jsonData = json.dumps(data)
 
-	#req = urllib.request.Request(requestURL)
-	#req.add_header('Content-Type', 'application/json')
-	response = requests.post(requestURL, data = data, headers = headers)
+	response = requests.post(requestURL, data = jsonData, headers = headers)
 	return response.status_code
+
+def sendMessage(chatID, textMessage):
+	requestURL = getBaseURL() + "sendMessage"
+	headers = getHeaders()
+
+	data = {}
+	data['chat_id'] = chatID
+	data['text'] = textMessage
+	jsonData = json.dumps(data)
+
+	response = requests.post(requestURL, data = jsonData, headers = headers)
+	return response
